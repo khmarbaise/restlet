@@ -82,6 +82,7 @@
     <module>mod-api</module>
     <module>mod-it</module>
     <module>mod-core</module>
+    <module>mod-persistence</module>
   </modules>
 </project>
 

@@ -25,6 +25,7 @@ public class FirstApplication extends Application {
 	//router.attache("/stages/", StagesResource.class); => List all stages
 	router.attach("/stage/{stageId}", StageResource.class);
 	router.attach("/stage/{stageId}/build", StageBuildResource.class);
+	router.attach("/stage/{stageId}/version", StageVersionResource.class);
 	return router;
     }
 }
