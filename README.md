@@ -11,6 +11,8 @@ curl -H "Accept: text/xml" http://localhost:9080/mod-war-0.1.0-SNAPSHOT/services
 
 curl -d "TestValue" -X PUT http://localhost:9080/mod-war-0.1.0-SNAPSHOT/services/stage/dev-1
 
+curl http://localhost:9080/mod-war-0.1.0-SNAPSHOT/system
+
 Ideas
 -----
 

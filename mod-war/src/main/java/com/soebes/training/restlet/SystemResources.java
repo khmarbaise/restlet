@@ -22,7 +22,7 @@ public class SystemResources extends ServerResource {
 	
 	long millis = currentTime.getTime() - startTime.getTime();
 	
-	String message = "System Message:" + startTime + " (" + millis + " ms)";
+	String message = "System Message:" + startTime + " (" + millis + " ms)" + Constants.NEWLINE;
 
 	return new StringRepresentation(message, MediaType.TEXT_PLAIN);
     }
