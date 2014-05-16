@@ -16,15 +16,26 @@ curl http://localhost:9080/mod-war-0.1.0-SNAPSHOT/system
 Ideas
 -----
 
- URL:9080/services/dev-01/deploy/version
+ URL:9080/services/dev-01/current
  
- GET => 1.23.4-135
- PUT => Set version
+ GET => xyz-abc.ear v:1.23.4-135
 
+ POST =>
+    Change current to previous 
+    set new version.
+    
+    Data: xyz-abc-1.23.4-2014050612.134567-135.ear
+ 
  URL:9080/services/dev-01/deploy/build
 
  GET => 3260
- PUT => 2345 (set Jenkins Build)
+ PUT => 2345 (set Jenkins Build number)
+
+
+ URL:9080/services/dev-01/current/UMG-1
+ URL:9080/services/dev-01/current/UMG-2
+ URL:9080/services/dev-01/current/UMG-3
+ 
 
 
 GET Requests:
