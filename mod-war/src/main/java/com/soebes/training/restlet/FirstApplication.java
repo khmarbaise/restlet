@@ -28,6 +28,7 @@ public class FirstApplication extends Application {
 	router.attach("/stage/{stageId}/version", StageVersionResource.class);
 
 	router.attach("/stage/{stageId}/{envId}/current", StageEnvironmentCurrent.class);
+	router.attach("/stage/{stageId}/{envId}/previous", StageEnvironmentPrevious.class);
 	return router;
     }
 }
