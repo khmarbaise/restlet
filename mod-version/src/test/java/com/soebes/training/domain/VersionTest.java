@@ -9,17 +9,20 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class VersionTest {
-    private static final Pattern MAJOR_MINOR_PATCH_PATTERN = Pattern.compile("(\\d+)(\\.(\\d+))?(\\.(\\d+))?(\\.(\\d+))?(\\.(\\d+))?",
-            Pattern.CASE_INSENSITIVE);
+    private static final Pattern MAJOR_MINOR_PATCH_PATTERN = Pattern.compile(
+	    "(\\d+)(\\.(\\d+))?(\\.(\\d+))?(\\.(\\d+))?(\\.(\\d+))?", Pattern.CASE_INSENSITIVE);
 
     private static final Pattern VERSION_PATTERN = Pattern.compile("(.*)\\-(\\d+)(\\.(\\d+)(\\.(\\d+))?)?(\\-(.*))?",
-            Pattern.CASE_INSENSITIVE);
+	    Pattern.CASE_INSENSITIVE);
 
-//    private static final Pattern SNAPSHOT_VERSION_PATTERN = Pattern.compile("\\-SNAPSHOT\\.((.*))$");
-    private static final Pattern SNAPSHOT_VERSION_PATTERN = Pattern.compile( "(.*)" + "\\-" + "(" + Pattern.quote("SNAPSHOT") + ")" + "\\.((.*))$");
-    
-    private static final Pattern VERSION_NEXUS_PATTERN = Pattern.compile("(.*)\\-(\\d{4})(\\d{2})(\\d{2})\\.(\\d{2})(\\d{2})(\\d{2})\\-(\\d+)\\.((.*))$");
-    
+    // private static final Pattern SNAPSHOT_VERSION_PATTERN =
+    // Pattern.compile("\\-SNAPSHOT\\.((.*))$");
+    private static final Pattern SNAPSHOT_VERSION_PATTERN = Pattern.compile("(.*)" + "\\-" + "(" + Pattern.quote("SNAPSHOT") + ")"
+	    + "\\.((.*))$");
+
+    private static final Pattern VERSION_NEXUS_PATTERN = Pattern
+	    .compile("(.*)\\-(\\d{4})(\\d{2})(\\d{2})\\.(\\d{2})(\\d{2})(\\d{2})\\-(\\d+)\\.((.*))$");
+
     @DataProvider
     public Object[][] getVersions() {
 	//@formatter:off
@@ -80,20 +83,17 @@ public class VersionTest {
 	//@formatter:on
     }
 
-
     @Test(dataProvider = "getSnapshotVersions")
     public void shouldSnapshotVersion(String snapshotVersions) {
 	Matcher matcher = SNAPSHOT_VERSION_PATTERN.matcher(snapshotVersions);
 	assertThat(matcher.matches()).isTrue();
-//	assertThat(matcher.groupCount()).isEqualTo(9);
+	// assertThat(matcher.groupCount()).isEqualTo(9);
 	System.out.println("-- SnapshotVersion: " + snapshotVersions);
 	System.out.println("  Groups:" + matcher.groupCount());
 	for (int i = 0; i < matcher.groupCount(); i++) {
 	    System.out.println("  Group[" + i + "]=" + matcher.group(i));
 	}
     }
-    
-
 
     @DataProvider
     public Object[][] getMajorMinorPatchVersions() {
@@ -107,7 +107,6 @@ public class VersionTest {
 	};
 	//@formatter:on
     }
-
 
     @Test(dataProvider = "getMajorMinorPatchVersions")
     public void shouldMajorMinorPatchVersion(String versions) {
