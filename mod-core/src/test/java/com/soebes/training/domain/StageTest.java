@@ -10,12 +10,14 @@ public class StageTest {
     public void shouldThrowExceptionCauseVersionIsNull() {
 	Stage env = new Stage();
 	env.setVersion(null);
+	//intentionally no assert... cause we except to get an exception.
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void shouldThrowExceptionCauseBuildIsLessThan1() {
 	Stage env = new Stage();
 	env.setBuild(0);
+	//intentionally no assert... cause we except to get an exception.
     }
     
     @Test

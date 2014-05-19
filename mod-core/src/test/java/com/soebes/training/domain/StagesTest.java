@@ -42,7 +42,7 @@ public class StagesTest {
     public void shouldReturnNothingCauseNotSetBefore() {
 	Stages env = new Stages();
 	assertThat(env.getStages()).hasSize(0);
-	env.getStages().get("dev-2");
+	assertThat(env.getStages().get("dev-2")).isEqualTo(Stage.UNKNOWN_STAGE);
     }
 
 }
