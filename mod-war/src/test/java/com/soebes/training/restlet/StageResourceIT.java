@@ -32,9 +32,13 @@ public class StageResourceIT extends IntegrationTestBase {
 
     @DataProvider
     public Object[][] getStages() {
-	// @formatter:off
-	return new String[][] { { "dev-1" }, { "dev-2" }, { "prod-1" }, };
-	// @formatter:on
+	//@formatter:off
+	return new String[][] { 
+	  { "dev-1" }, 
+	  { "dev-2" }, 
+	  { "prod-1" },
+	};
+	//@formatter:on
     }
 
     @Test(dataProvider = "getStages")
