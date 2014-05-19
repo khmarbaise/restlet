@@ -9,6 +9,7 @@ import org.restlet.routing.Router;
 public class FirstApplication extends Application {
 
     public FirstApplication() {
+	System.out.println("ctor FirstApplication");
 	setDescription("This is the first REST applicaiton");
 	setAuthor("I'm the one");
 	setName("FirstStages");

@@ -38,4 +38,11 @@ public class StagesTest {
 	assertThat(env.getStages().get("dev-1").getBuild()).isEqualTo(build);
     }
 
+    @Test
+    public void shouldReturnNothingCauseNotSetBefore() {
+	Stages env = new Stages();
+	assertThat(env.getStages()).hasSize(0);
+	env.getStages().get("dev-2");
+    }
+
 }
