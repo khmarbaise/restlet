@@ -17,7 +17,7 @@ import org.testng.annotations.Test;
 
 public class StageEnvironmentCurrentIT extends IntegrationTestBase {
 
-    @DataProvider(name="getStages")
+    @DataProvider
     public Object[][] getStages() {
 	//@formatter:off
 	return new String[][] {

@@ -10,7 +10,7 @@ public class StagesTest {
     public void shouldReturnNullPointer() {
 	Stages env = new Stages();
 	env.add(null);
-	//intentionally no assert..cause we expect to get an exception.
+	// intentionally no assert..cause we expect to get an exception.
     }
 
     @Test
@@ -38,11 +38,17 @@ public class StagesTest {
 	assertThat(env.getStages().get("dev-1").getBuild()).isEqualTo(build);
     }
 
-    @Test
-    public void shouldReturnNothingCauseNotSetBefore() {
+    @Test(expectedExceptions = NullPointerException.class)
+    public void shouldReturnNullPointerExceptionInCaseOfGivingNull() {
 	Stages env = new Stages();
-	assertThat(env.getStages()).hasSize(0);
-	assertThat(env.getStages().get("dev-2")).isEqualTo(Stage.UNKNOWN_STAGE);
+	env.getStage(null);
+	// intentionally no assert..cause we expect to get an exception.
+    }
+
+    @Test
+    public void shouldReturnUnkonwnStageCauseNothingSetBefore() {
+	Stages env = new Stages();
+	assertThat(env.getStage("dev-2")).isEqualTo(Stage.UNKNOWN_STAGE);
     }
 
 }

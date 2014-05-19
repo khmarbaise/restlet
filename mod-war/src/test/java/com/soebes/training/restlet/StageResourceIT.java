@@ -28,18 +28,13 @@ public class StageResourceIT extends IntegrationTestBase {
 
 	assertThat(response.getStatus()).isEqualTo(Status.SUCCESS_OK);
 	assertThat(response.getEntityAsText()).isEqualTo("Welcome to the FirstStages !");
-
     }
 
-    @DataProvider(name="getStages")
+    @DataProvider
     public Object[][] getStages() {
-	//@formatter:off
-	return new String[][] {
-		{"dev-1"},
-		{"dev-2"},
-		{"prod-1"},
-	};
-	//@formatter:on
+	// @formatter:off
+	return new String[][] { { "dev-1" }, { "dev-2" }, { "prod-1" }, };
+	// @formatter:on
     }
 
     @Test(dataProvider = "getStages")
@@ -64,19 +59,5 @@ public class StageResourceIT extends IntegrationTestBase {
 	assertThat(response.getStatus()).isEqualTo(Status.SUCCESS_OK);
 	assertThat(response.getEntityAsText()).isEqualTo("This is the given message.");
     }
-
-    
-    /*
-     * 
-     * String url ="http://localhost:8190/project/user/status"; Client client =
-     * new Client(Protocol.HTTP); ChallengeResponse challengeResponse = new
-     * ChallengeResponse(ChallengeScheme.HTTP_BASIC,"user",
-     * "f399b0a660f684b2c5a6b4c054f22d89"); Request request = new
-     * Request(Method.GET, url);
-     * request.setChallengeResponse(challengeResponse); Response response =
-     * client.handle(request);
-     * System.out.println("request"+response.getStatus().getCode());
-     * System.out.println("request test::"+response.getEntityAsText());
-     */
 
 }
