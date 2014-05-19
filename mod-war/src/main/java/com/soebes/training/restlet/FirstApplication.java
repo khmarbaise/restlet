@@ -10,6 +10,8 @@ import com.soebes.training.domain.Stages;
 
 public class FirstApplication extends Application {
 
+    public static final String STAGES = "stages";
+    
     public FirstApplication() {
 	System.out.println("ctor FirstApplication");
 	setDescription("This is the first REST applicaiton");
@@ -20,7 +22,7 @@ public class FirstApplication extends Application {
     @Override
     public synchronized Restlet createInboundRoot() {
 	getContext().getAttributes().put("startTime", new Date());
-	getContext().getAttributes().put("stages", new Stages());
+	getContext().getAttributes().put(STAGES, new Stages());
 	
 	// Create a router Restlet that routes each call to a
 	// new instance of HelloWorldResource.

@@ -3,6 +3,8 @@ package com.soebes.training.restlet;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
+import com.soebes.training.domain.Stages;
+
 public class StageEnvironmentBase extends ServerResource {
 
     private String stageId;
@@ -28,6 +30,10 @@ public class StageEnvironmentBase extends ServerResource {
 
     public void setEnvId(String envId) {
         this.envId = envId;
+    }
+
+    public Stages getStages() {
+        return (Stages) getContext().getAttributes().get(FirstApplication.STAGES);
     }
 
 }
