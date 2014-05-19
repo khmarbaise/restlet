@@ -16,11 +16,11 @@
   <name>RESTlet Test :: REST</name>
   <description></description>
   <dependencies>
-    <!-- <dependency> -->
-    <!-- <groupId>${project.groupId}</groupId> -->
-    <!-- <artifactId>mod-api</artifactId> -->
-    <!-- <version>${project.version}</version> -->
-    <!-- </dependency> -->
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>mod-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>

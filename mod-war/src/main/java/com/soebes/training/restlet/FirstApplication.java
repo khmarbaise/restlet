@@ -6,6 +6,8 @@ import org.restlet.Application;
 import org.restlet.Restlet;
 import org.restlet.routing.Router;
 
+import com.soebes.training.domain.Stages;
+
 public class FirstApplication extends Application {
 
     public FirstApplication() {
@@ -18,6 +20,8 @@ public class FirstApplication extends Application {
     @Override
     public synchronized Restlet createInboundRoot() {
 	getContext().getAttributes().put("startTime", new Date());
+	getContext().getAttributes().put("stages", new Stages());
+	
 	// Create a router Restlet that routes each call to a
 	// new instance of HelloWorldResource.
 	Router router = new Router(getContext());
