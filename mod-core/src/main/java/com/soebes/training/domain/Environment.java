@@ -4,6 +4,9 @@ public class Environment {
 
     private String id;
 
+    private Version current;
+    private Version previous;
+    
     public String getId() {
 	return id;
     }

@@ -31,11 +31,8 @@ public class StagesTest {
 
     @Test
     public void shouldReturnBuildWhichHasBeenSetBefore() {
-	int build = 2345;
 	Stages env = new Stages();
-	env.add("dev-1").setBuild(build);
 	assertThat(env.getStages()).hasSize(1);
-	assertThat(env.getStages().get("dev-1").getBuild()).isEqualTo(build);
     }
 
     @Test(expectedExceptions = NullPointerException.class)

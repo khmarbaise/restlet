@@ -16,6 +16,12 @@
 
   <dependencies>
     <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>mod-version</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  
+    <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
       <scope>test</scope>
