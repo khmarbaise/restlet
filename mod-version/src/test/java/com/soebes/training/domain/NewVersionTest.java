@@ -21,19 +21,23 @@ public class NewVersionTest {
 		{ "A-1.2.3.4.5.jar" },
 		{ "A-1.12.123.1234.12345.1234567.12345678.123456789.jar" },
 		{ "A-2.16.0.1.jar" },
+		{ "first-ear-1.2.3.4.5.jar" },
 		{ "xyz-abc-1.2.3.jar" },
 		{ "xyz-abc-1.2.3.45.jar" },
 		{ "xyz-abc-1.2.3.45.600.jar" },
 		{ "A-1-sources.jar" },
 		{ "A-1.2-test-jar.jar" },
+		{ "first-1.2-test-jar.tar.gz" },
+		{ "anton-1.2.4.5.tar.gz" },
 	};
 	//@formatter:on
     }
 
     private static final Pattern VERSION_PATTERN = Pattern.compile("(.*)"
     	+ "\\-((\\d+)(\\.(\\d+))*)"
-    	+ "(\\-(.*)?)?"
-    	+ "\\.(.*)$",
+    	+ "(\\-(.+)?)?"
+//    	+ "(?<=\\.).*$"
+    	+ "\\.(.+)(\\.(.+))*$",
 	    Pattern.CASE_INSENSITIVE);
 
     @Test(dataProvider = "getVersions")
