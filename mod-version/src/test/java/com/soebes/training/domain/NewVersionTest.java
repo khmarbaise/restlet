@@ -31,7 +31,7 @@ public class NewVersionTest {
     }
 
     private static final Pattern VERSION_PATTERN = Pattern.compile("(.*)"
-    	+ "\\-((\\d+)(\\.(\\d+)){0,})"
+    	+ "\\-((\\d+)(\\.(\\d+))*)"
     	+ "(\\-(.*)?)?"
     	+ "\\.(.*)$",
 	    Pattern.CASE_INSENSITIVE);
