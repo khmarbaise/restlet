@@ -28,6 +28,10 @@ public class NewVersionTest {
 		{ "A-1-sources.jar" },
 		{ "A-1.2-test-jar.jar" },
 		{ "first-1.2-test-jar.tar.gz" },
+		{ "first-1.2-test-jar.anton.egon.friedhelm.gz" },
+		{ "first-1.2-test-jar.tar" },
+		{ "first-1.2-test-jar.tar.bz2" },
+		{ "first-1.2-test-jar.zip" },
 		{ "anton-1.2.4.5.tar.gz" },
 	};
 	//@formatter:on
@@ -35,9 +39,8 @@ public class NewVersionTest {
 
     private static final Pattern VERSION_PATTERN = Pattern.compile("(.*)"
     	+ "\\-((\\d+)(\\.(\\d+))*)"
-    	+ "(\\-(.+)?)?"
-//    	+ "(?<=\\.).*$"
-    	+ "\\.(.+)(\\.(.+))*$",
+    	+ "(\\-([^.]+)?)?" //Classifier
+    	+ "\\.((.+)(\\.(.+))*)$", //Extension .tar.gz ?
 	    Pattern.CASE_INSENSITIVE);
 
     @Test(dataProvider = "getVersions")
