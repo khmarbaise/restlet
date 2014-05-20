@@ -39,7 +39,7 @@ public class NewVersionTest {
 
     private static final Pattern VERSION_PATTERN = Pattern.compile("(.*)"
     	+ "\\-((\\d+)(\\.(\\d+))*)"
-    	+ "(\\-([^.]+)?)?" //Classifier
+    	+ "(\\-([^.]+))?" //Classifier
     	+ "\\.((.+)(\\.(.+))*)$", //Extension .tar.gz ?
 	    Pattern.CASE_INSENSITIVE);
 
