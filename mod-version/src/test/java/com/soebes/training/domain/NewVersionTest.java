@@ -19,6 +19,7 @@ public class NewVersionTest {
 		{ "A-1.2.3.jar" },
 		{ "A-1.2.3.4.jar" },
 		{ "A-1.2.3.4.5.jar" },
+		{ "A-1.12.123.1234.12345.1234567.12345678.123456789.jar" },
 		{ "A-2.16.0.1.jar" },
 		{ "xyz-abc-1.2.3.jar" },
 		{ "xyz-abc-1.2.3.45.jar" },
@@ -30,7 +31,7 @@ public class NewVersionTest {
     }
 
     private static final Pattern VERSION_PATTERN = Pattern.compile("(.*)"
-    	+ "\\-((\\d+)" + "((\\.(\\d+)){0,})?)"
+    	+ "\\-((\\d+)(\\.(\\d+)){0,})"
     	+ "(\\-(.*)?)?"
     	+ "\\.(.*)$",
 	    Pattern.CASE_INSENSITIVE);
