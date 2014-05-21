@@ -46,6 +46,22 @@ public class NewVersionTest {
         assertThat(version.getVersion()).isEqualTo(expectedVersion);
         assertThat(version.getClassifier()).isEqualTo(expectedClassifier);
         assertThat(version.getExtension()).isEqualTo(expectedExtension);
+        assertThat(version.isSnapshot()).isFalse();
+    }
+
+    @Test(dataProvider = "getVersions")
+    public void shouldParseAllGivenSnapshotVersionsWithoutFailure(String expectedArtifact, String expectedVersion,
+            String expectedClassifier, String expectedExtension) {
+        String constructedVersion = expectedArtifact + "-" + expectedVersion + "-SNAPSHOT"
+                + (expectedClassifier == NO_CLASSIFIER ? "" : "-" + expectedClassifier) + "." + expectedExtension;
+        
+        NewVersion version = new NewVersion(constructedVersion);
+        assertThat(version.getArtifact()).isEqualTo(expectedArtifact);
+        assertThat(version.getVersion()).isEqualTo(expectedVersion);
+        assertThat(version.getClassifier()).isEqualTo(expectedClassifier);
+        assertThat(version.getExtension()).isEqualTo(expectedExtension);
+        assertThat(version.isSnapshot()).isTrue();
+
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -53,4 +69,5 @@ public class NewVersionTest {
         new NewVersion("anton");
         // intentionally no assert() cause we expect to get an exception.
     }
+
 }
