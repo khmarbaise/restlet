@@ -39,8 +39,10 @@ public class NewVersionTest {
     @Test(dataProvider = "getVersions")
     public void shouldParseAllGivenVersionsWithoutFailure(String expectedArtifact, String expectedVersion,
             String expectedClassifier, String expectedExtension) {
+        
         String createdVersion = expectedArtifact + "-" + expectedVersion
                 + (expectedClassifier == NO_CLASSIFIER ? "" : "-" + expectedClassifier) + "." + expectedExtension;
+
         NewVersion version = new NewVersion(createdVersion);
         assertThat(version.getArtifact()).isEqualTo(expectedArtifact);
         assertThat(version.getVersion()).isEqualTo(expectedVersion);
@@ -52,10 +54,12 @@ public class NewVersionTest {
     @Test(dataProvider = "getVersions")
     public void shouldParseAllGivenSnapshotVersionsWithoutFailure(String expectedArtifact, String expectedVersion,
             String expectedClassifier, String expectedExtension) {
+        
         String constructedVersion = expectedArtifact + "-" + expectedVersion + "-SNAPSHOT"
                 + (expectedClassifier == NO_CLASSIFIER ? "" : "-" + expectedClassifier) + "." + expectedExtension;
         
         NewVersion version = new NewVersion(constructedVersion);
+
         assertThat(version.getArtifact()).isEqualTo(expectedArtifact);
         assertThat(version.getVersion()).isEqualTo(expectedVersion);
         assertThat(version.getClassifier()).isEqualTo(expectedClassifier);

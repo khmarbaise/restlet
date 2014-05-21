@@ -6,15 +6,6 @@ import java.util.regex.Pattern;
 public class NewVersion {
 
     //@formatter:off
-    private static final Pattern VERSION_PATTERN = Pattern.compile("(.*)" 
-        + "\\-((\\d+)(\\.(\\d+))*)" 
-        + "(\\-([^.]+))?" // Classifier
-        + "\\.((.+)(\\.(.+))*)$", // Extension .tar.gz ?
-        Pattern.CASE_INSENSITIVE
-    );
-    //@formatter:on
-
-    //@formatter:off
     private static final Pattern SNAPSHOT_VERSION_PATTERN = Pattern.compile("(.*)" 
        + "\\-((\\d+)(\\.(\\d+))*)" 
        + "(\\-(" + Pattern.quote("SNAPSHOT") + "))?"
@@ -30,7 +21,6 @@ public class NewVersion {
     private boolean snapshot;
 
     public NewVersion(String version) {
-        Matcher matcher = VERSION_PATTERN.matcher(version);
         Matcher matcherSnapshot = SNAPSHOT_VERSION_PATTERN.matcher(version);
 
         if (matcherSnapshot.matches()) {
@@ -40,19 +30,14 @@ public class NewVersion {
             }
             this.artifact = matcherSnapshot.group(1);
             this.version = matcherSnapshot.group(2);
-    
-            if (matcherSnapshot.group(7) == null ) {
+
+            if (matcherSnapshot.group(7) == null) {
                 this.snapshot = false;
             } else {
                 this.snapshot = true;
             }
             this.classifier = matcherSnapshot.group(9);
             this.extension = matcherSnapshot.group(11);
-        } else if (matcher.matches()) {
-            this.artifact = matcher.group(1);
-            this.version = matcher.group(2);
-            this.classifier = matcher.group(7);
-            this.extension = matcher.group(9);
         } else {
             throw new IllegalArgumentException("The format of the version does not match.");
         }
