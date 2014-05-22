@@ -2,121 +2,125 @@ package com.soebes.training.domain;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Random;
+import java.util.TimeZone;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class VersionTest {
-    private static final Pattern MAJOR_MINOR_PATCH_PATTERN = Pattern.compile(
-            "(\\d+)(\\.(\\d+))?(\\.(\\d+))?(\\.(\\d+))?(\\.(\\d+))?", Pattern.CASE_INSENSITIVE);
 
-    private static final Pattern VERSION_PATTERN = Pattern.compile("(.*)\\-(\\d+)(\\.(\\d+)(\\.(\\d+))?)?(\\-(.*))?",
-            Pattern.CASE_INSENSITIVE);
-
-    // private static final Pattern SNAPSHOT_VERSION_PATTERN =
-    // Pattern.compile("\\-SNAPSHOT\\.((.*))$");
-    private static final Pattern SNAPSHOT_VERSION_PATTERN = Pattern.compile("(.*)" + "\\-" + "(" + Pattern.quote("SNAPSHOT") + ")"
-            + "\\.((.*))$");
-
-    private static final Pattern VERSION_NEXUS_PATTERN = Pattern
-            .compile("(.*)\\-(\\d{4})(\\d{2})(\\d{2})\\.(\\d{2})(\\d{2})(\\d{2})\\-(\\d+)\\.((.*))$");
+    public static final String NO_CLASSIFIER = null;
 
     @DataProvider
     public Object[][] getVersions() {
         //@formatter:off
-	return new String[][] {
-		{ "A-1.2.3-SNAPSHOT.jar" },
-		{ "xyz-abc-1.2.3-20140516.123456-12.jar" },
-	};
-	//@formatter:on
+		return new String[][] {
+			{ "A",         "1",                                              NO_CLASSIFIER,  "jar"  },
+			{ "A",         "1.2",                                            NO_CLASSIFIER,  "jar"   },
+			{ "A",         "1.2.3",                                          NO_CLASSIFIER,  "jar"   },
+			{ "A",         "1.2.3.4",                                        NO_CLASSIFIER,  "jar"  },
+			{ "A",         "1.2.3.4.5",                                      NO_CLASSIFIER,  "jar"   },
+			{ "A",         "1.12.123.1234.12345.1234567.12345678.123456789", NO_CLASSIFIER,  "jar"   },
+			{ "A",         "2.16.0.1",                                       NO_CLASSIFIER,  "jar"   },
+			{ "first-ear", "1.2.3.4.5",                                      NO_CLASSIFIER,  "jar"   },
+			{ "xyz-abc",   "1.2.3",                                          NO_CLASSIFIER,  "jar"   },
+			{ "xyz-abc",   "1.2.3.45",                                       NO_CLASSIFIER,  "jar"   },
+			{ "xyz-abc",   "1.2.3.45.600",                                   NO_CLASSIFIER,  "jar"   },
+			{ "A",         "1",                                              "sources",      "jar" },
+			{ "A",         "1.2",                                            "test-jar",     "jar"  },
+			{ "first",     "1.2",                                            "test-jar",     "tar.gz"  },
+			{ "first",     "1.2",                                            "test-jar",     "anton.egon.friedhelm.gz"   },
+			{ "first",     "1.2",                                            "test-jar",     "tar"  },
+			{ "first",     "1.2",                                            "test-jar",     "tar.bz2"  },
+			{ "first",     "1.2",                                            "test-jar",     "zip"  },
+			{ "anton",     "1.2.4.5",                                        NO_CLASSIFIER,  "tar.gz"  },
+		};
+   		//@formatter:on
     }
 
     @Test(dataProvider = "getVersions")
-    public void xTest(String version) {
-        Matcher matcher = VERSION_PATTERN.matcher(version);
-        assertThat(matcher.matches()).isTrue();
-        System.out.println("-- Version: " + version);
-        System.out.println("  Groups:" + matcher.groupCount());
-        for (int i = 0; i < matcher.groupCount(); i++) {
-            System.out.println("  Group[" + i + "]=" + matcher.group(i));
-        }
+    public void shouldParseAllGivenVersionsWithoutFailure(String expectedArtifact, String expectedVersion,
+            String expectedClassifier, String expectedExtension) throws ParseException {
+        
+        String createdVersion = expectedArtifact + "-" + expectedVersion
+                + (expectedClassifier == NO_CLASSIFIER ? "" : "-" + expectedClassifier) + "." + expectedExtension;
+
+        Version version = new Version(createdVersion);
+        assertThat(version.getArtifact()).isEqualTo(expectedArtifact);
+        assertThat(version.getVersion()).isEqualTo(expectedVersion);
+        assertThat(version.getClassifier()).isEqualTo(expectedClassifier);
+        assertThat(version.getExtension()).isEqualTo(expectedExtension);
+        assertThat(version.isSnapshot()).isFalse();
     }
 
-    @DataProvider
-    public Object[][] getNexusVersions() {
-        //@formatter:off
-	return new String[][] {
-		{ "A-1.2.3-20140526.123456-1.jar" },
-		{ "XYZ-egon-2.4.5.16-20140526.123456-12.jar" },
-		{ "first-artifact-1.2-20140516.123456-34342.jar" },
-		{ "the-first-artifacts-20131216.024555-137.tar.gz" },
-	};
-	//@formatter:on
+    @Test(dataProvider = "getVersions")
+    public void shouldParseAllGivenSnapshotVersionsWithoutFailure(String expectedArtifact, String expectedVersion,
+            String expectedClassifier, String expectedExtension) throws ParseException {
+        
+        String constructedVersion = expectedArtifact + "-" + expectedVersion + "-SNAPSHOT"
+                + (expectedClassifier == NO_CLASSIFIER ? "" : "-" + expectedClassifier) + "." + expectedExtension;
+        
+        Version version = new Version(constructedVersion);
+
+        assertThat(version.getArtifact()).isEqualTo(expectedArtifact);
+        assertThat(version.getVersion()).isEqualTo(expectedVersion);
+        assertThat(version.getClassifier()).isEqualTo(expectedClassifier);
+        assertThat(version.getExtension()).isEqualTo(expectedExtension);
+        assertThat(version.isSnapshot()).isTrue();
+
     }
 
-    @Test(dataProvider = "getNexusVersions")
-    public void shouldNexusVersion(String nexusVersions) {
-        Matcher matcher = VERSION_NEXUS_PATTERN.matcher(nexusVersions);
-        assertThat(matcher.matches()).isTrue();
-        assertThat(matcher.groupCount()).isEqualTo(10);
-        System.out.println("-- NexusVersion: " + nexusVersions);
-        System.out.println("  Groups:" + matcher.groupCount());
-        for (int i = 0; i < matcher.groupCount(); i++) {
-            System.out.println("  Group[" + i + "]=" + matcher.group(i));
-        }
+    @Test(dataProvider = "getVersions")
+    public void shouldParseAllGivenNexusVersionsWithoutFailure(String expectedArtifact, String expectedVersion,
+            String expectedClassifier, String expectedExtension) throws ParseException {
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd.HHmmss");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        cal.set(Calendar.YEAR, 2014);
+        cal.set(Calendar.MONTH, 5);
+        cal.set(Calendar.DAY_OF_MONTH, 20);
+        cal.set(Calendar.HOUR_OF_DAY, 22);
+        cal.set(Calendar.MINUTE, 34);
+        cal.set(Calendar.SECOND, 57);
+        
+        String nexusDate = sdf.format(cal.getTime());
+        Random r = new Random(System.currentTimeMillis());
+        int nextInt = r.nextInt(2048);
+
+        String constructedVersion = expectedArtifact + "-" + expectedVersion + "-" + nexusDate + "-" + nextInt
+                + (expectedClassifier == NO_CLASSIFIER ? "" : "-" + expectedClassifier) + "." + expectedExtension;
+        
+        Version version = new Version(constructedVersion);
+
+        assertThat(version.getArtifact()).isEqualTo(expectedArtifact);
+        assertThat(version.getVersion()).isEqualTo(expectedVersion);
+        assertThat(version.getClassifier()).isEqualTo(expectedClassifier);
+        assertThat(version.getExtension()).isEqualTo(expectedExtension);
+        
+        NexusDate resultNexusDate = version.getNexusDate();
+        assertThat(resultNexusDate.getYear()).isEqualTo(2014);
+        assertThat(resultNexusDate.getMonth()).isEqualTo(6);
+        assertThat(resultNexusDate.getDay()).isEqualTo(20);
+        assertThat(resultNexusDate.getHour()).isEqualTo(22);
+        assertThat(resultNexusDate.getMinute()).isEqualTo(34);
+        assertThat(resultNexusDate.getSeconds()).isEqualTo(57);
     }
 
-    @DataProvider
-    public Object[][] getSnapshotVersions() {
-        //@formatter:off
-	return new String[][] {
-		{ "A-1-SNAPSHOT.jar" },
-		{ "A-1.2-SNAPSHOT.jar" },
-		{ "A-1.2.3-SNAPSHOT.jar" },
-		{ "TheFirstArtifact-second-1.2.3.4-SNAPSHOT.jar" },
-		{ "xyz-abc-1.2.3-SNAPSHOT.jar" },
-		{ "xyz-abc-1.2.3-SNAPSHOT.zip" },
-		{ "xyz-abc-1.2.3-SNAPSHOT.tar.gz" },
-	};
-	//@formatter:on
+    @Test
+    public void check() throws ParseException {
+        String version = "first-1.2-20140620.223457-1825-test-jar.anton.egon.friedhelm.gz";
+        Version v = new Version(version);
     }
 
-    @Test(dataProvider = "getSnapshotVersions")
-    public void shouldSnapshotVersion(String snapshotVersions) {
-        Matcher matcher = SNAPSHOT_VERSION_PATTERN.matcher(snapshotVersions);
-        assertThat(matcher.matches()).isTrue();
-        // assertThat(matcher.groupCount()).isEqualTo(9);
-        System.out.println("-- SnapshotVersion: " + snapshotVersions);
-        System.out.println("  Groups:" + matcher.groupCount());
-        for (int i = 0; i < matcher.groupCount(); i++) {
-            System.out.println("  Group[" + i + "]=" + matcher.group(i));
-        }
-    }
-
-    @DataProvider
-    public Object[][] getMajorMinorPatchVersions() {
-        //@formatter:off
-	return new String[][] {
-		{ "1" },
-		{ "1.2" },
-		{ "1.2.3" },
-		{ "1.2.3.4" },
-		{ "1.2.3.4.5" },
-	};
-	//@formatter:on
-    }
-
-    @Test(dataProvider = "getMajorMinorPatchVersions")
-    public void shouldMajorMinorPatchVersion(String versions) {
-        Matcher matcher = MAJOR_MINOR_PATCH_PATTERN.matcher(versions);
-        assertThat(matcher.matches()).isTrue();
-        System.out.println("-- MajorMinorPatchVersions: " + versions);
-        System.out.println("  Groups:" + matcher.groupCount());
-        for (int i = 0; i < matcher.groupCount(); i++) {
-            System.out.println("  Group[" + i + "]=" + matcher.group(i));
-        }
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void shouldThrowIllegalArgumentException() throws ParseException {
+        new Version("anton");
+        // intentionally no assert() cause we expect to get an exception.
     }
 
 }

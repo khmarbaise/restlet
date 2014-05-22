@@ -10,32 +10,32 @@ public class Stages {
     private Map<String, Stage> stages;
 
     public Stages() {
-	stages = new ConcurrentHashMap<String, Stage>();
+        stages = new ConcurrentHashMap<String, Stage>();
     }
 
     public Stage add(String stage) {
-	checkNotNull(stage, "Not allowed to give null for stage");
-	Stage env = new Stage();
-	getStages().put(stage, env);
-	return env;
+        checkNotNull(stage, "Not allowed to give null for stage");
+        Stage env = new Stage();
+        getStages().put(stage, env);
+        return env;
     }
 
-    public Stage getStage (String stageId) {
-	checkNotNull(stageId, "Null not allowed for stageId");
-	if (getStages().containsKey(stageId)) {
-	    return getStages().get(stageId);
-	} else {
-	    return Stage.UNKNOWN_STAGE;
-	}
+    public Stage getStage(String stageId) {
+        checkNotNull(stageId, "Null not allowed for stageId");
+        if (getStages().containsKey(stageId)) {
+            return getStages().get(stageId);
+        } else {
+            return Stage.UNKNOWN_STAGE;
+        }
     }
-    
+
     public Map<String, Stage> getStages() {
-	return stages;
+        return stages;
     }
 
     public Stages setStages(Map<String, Stage> stages) {
-	this.stages = checkNotNull(stages, "Not allowed to give null for stages");
-	return this;
+        this.stages = checkNotNull(stages, "Not allowed to give null for stages");
+        return this;
     }
 
 }

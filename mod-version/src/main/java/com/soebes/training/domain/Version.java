@@ -1,86 +1,135 @@
 package com.soebes.training.domain;
 
-import java.util.Calendar;
-import java.util.TimeZone;
+import java.text.ParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Version {
 
-    private static final String SNAPSHOT = "-SNAPSHOT";
+    //@formatter:off
+    private static final Pattern SNAPSHOT_VERSION_PATTERN = Pattern.compile("(.*?)" 
+       + "\\-((\\d+)(\\.(\\d+))*)" 
+       + "(\\-(\\d{4}\\d{2}\\d{2}\\.\\d{2}\\d{2}\\d{2})\\-(\\d+))?"
+       + "(\\-(" + Pattern.quote("SNAPSHOT") + "))?"
+       + "(\\-([^.]+))?" // Classifier
+       + "\\.((.+)(\\.(.+))*)$" // Extension .tar.gz ?
+    ); 
+    //@formatter:on
+
     private String version;
-    
-    private int nexusCounter;
+    private String classifier;
     private String extension;
-
-    private static final Pattern VERSION_PATTERN = Pattern.compile("(\\d+)(\\.(\\d+)(\\.(\\d+))?)?(\\-(.*))?",
-	    Pattern.CASE_INSENSITIVE);
-
-    private static final Pattern VERSION_NEXUS_PATTERN = Pattern.compile(
-	    "\\-(\\d{4})(\\d{2})(\\d{2})\\.(\\d{2})(\\d{2})(\\d{2})\\-(\\d+)\\.((.*))$", Pattern.CASE_INSENSITIVE);
-
-    public Version() {
-    }
-
+    private String artifact;
     private boolean snapshot;
+    private boolean release;
+    private boolean nexus;
+    private NexusDate nexusDate;
+    private int nexusCount;
 
-    private boolean nexusVersion(String version) {
-	boolean result = false;
-	Matcher matcher = VERSION_NEXUS_PATTERN.matcher(version);
-	if (matcher.matches()) {
-	    result = true;
+    public Version(String version) throws ParseException {
+        Matcher matcherSnapshot = SNAPSHOT_VERSION_PATTERN.matcher(version);
 
-	    Calendar cal = Calendar.getInstance();
-	    cal.set(Calendar.YEAR, Integer.valueOf(matcher.group(1)));
-	    cal.set(Calendar.MONTH, Integer.valueOf(matcher.group(2)));
-	    cal.set(Calendar.DAY_OF_MONTH, Integer.valueOf(matcher.group(3)));
-	    cal.set(Calendar.HOUR_OF_DAY, Integer.valueOf(matcher.group(4)));
-	    cal.set(Calendar.MINUTE, Integer.valueOf(matcher.group(5)));
-	    cal.set(Calendar.SECOND, Integer.valueOf(matcher.group(6)));
-	    cal.setTimeZone(TimeZone.getTimeZone("UTC"));
-	    
-	    this.nexusCounter = Integer.valueOf(matcher.group(7));
-	    this.extension = matcher.group(8);
-	}
-	return result;
+        if (matcherSnapshot.matches()) {
+            this.artifact = matcherSnapshot.group(1);
+            this.version = matcherSnapshot.group(2);
+
+            if (matcherSnapshot.group(7) != null) {
+                this.nexusDate = new NexusDate(matcherSnapshot.group(7));
+                this.nexus = true;
+                this.snapshot = true;
+                this.nexusCount = Integer.valueOf(matcherSnapshot.group(8));
+            }
+
+            if (matcherSnapshot.group(10) == null) {
+                this.snapshot = false;
+                this.release = true;
+            } else {
+                this.snapshot = true;
+                this.release = false;
+            }
+            
+            this.classifier = matcherSnapshot.group(12);
+            this.extension = matcherSnapshot.group(14);
+        } else {
+            throw new IllegalArgumentException("The format of the version does not match.");
+        }
+
     }
 
-    public Version(String version) {
-	this.version = version;
-	
-	if (VERSION_NEXUS_PATTERN.matcher(version).matches()) {
-	    //Nexus.
-//	} else if () {
-//	    
-	}
+    public boolean hasClassifier() {
+        return getClassifier() != null;
+    }
 
-	Matcher matcher = VERSION_PATTERN.matcher(version);
-	if (matcher.matches()) {
-	    if (matcher.group(1) != null) {
-		// setMajor(Integer.valueOf(matcher.group(1)));
-	    }
-	    if (matcher.group(3) != null) {
-		// setMinor(Integer.valueOf(matcher.group(3)));
-	    }
-	    if (matcher.group(5) != null) {
-		// setPatch(Integer.valueOf(matcher.group(5)));
-	    }
-	    if (matcher.group(6) != null && matcher.group(6).equals(SNAPSHOT)) {
-		// setSnapshot(true);
-	    } else {
-		// setQualifier(matcher.group(7));
-	    }
-	} else {
-	    throw new IllegalArgumentException("The version '" + version + "' does not match the pattern x.y.z or x.y.z-SNAPSHOT!");
-	}
+    public String getVersion() {
+        return version;
+    }
 
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getClassifier() {
+        return classifier;
+    }
+
+    public void setClassifier(String classifier) {
+        this.classifier = classifier;
+    }
+
+    public String getExtension() {
+        return extension;
+    }
+
+    public void setExtension(String extension) {
+        this.extension = extension;
+    }
+
+    public String getArtifact() {
+        return artifact;
+    }
+
+    public void setArtifact(String artifact) {
+        this.artifact = artifact;
     }
 
     public boolean isSnapshot() {
-	if (this.version.endsWith(SNAPSHOT)) {
-	    return true;
-	} else {
-	    return false;
-	}
+        return snapshot;
     }
+
+    public void setSnapshot(boolean snapshot) {
+        this.snapshot = snapshot;
+    }
+
+    public boolean isRelease() {
+        return release;
+    }
+
+    public void setRelease(boolean release) {
+        this.release = release;
+    }
+
+    public boolean isNexus() {
+        return nexus;
+    }
+
+    public void setNexus(boolean nexus) {
+        this.nexus = nexus;
+    }
+
+    public NexusDate getNexusDate() {
+        return nexusDate;
+    }
+
+    public void setNexusDate(NexusDate nexusDate) {
+        this.nexusDate = nexusDate;
+    }
+
+    public int getNexusCount() {
+        return nexusCount;
+    }
+
+    public void setNexusCount(int nexusCount) {
+        this.nexusCount = nexusCount;
+    }
+
 }

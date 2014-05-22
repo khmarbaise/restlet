@@ -13,23 +13,24 @@ public class Stage {
     private String version;
 
     private Map<String, Environment> environments;
-    
+
     public Stage() {
-	this.version = UNKNOWN_VERSION;
+        this.version = UNKNOWN_VERSION;
     }
 
     public Stage(String version, int build) {
-	super();
-	this.version = checkNotNull(version, "Null not allowed for version");
+        super();
+        this.version = checkNotNull(version, "Null not allowed for version");
     }
 
     public String getVersion() {
-	return version;
+        return version;
     }
 
     public Stage setVersion(String version) {
-	this.version = checkNotNull(version, "Null not allowed for version");;
-	return this;
+        this.version = checkNotNull(version, "Null not allowed for version");
+        ;
+        return this;
     }
 
 }
