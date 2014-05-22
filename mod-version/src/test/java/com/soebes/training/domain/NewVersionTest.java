@@ -2,6 +2,12 @@ package com.soebes.training.domain;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Random;
+import java.util.TimeZone;
+
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -38,7 +44,7 @@ public class NewVersionTest {
 
     @Test(dataProvider = "getVersions")
     public void shouldParseAllGivenVersionsWithoutFailure(String expectedArtifact, String expectedVersion,
-            String expectedClassifier, String expectedExtension) {
+            String expectedClassifier, String expectedExtension) throws ParseException {
         
         String createdVersion = expectedArtifact + "-" + expectedVersion
                 + (expectedClassifier == NO_CLASSIFIER ? "" : "-" + expectedClassifier) + "." + expectedExtension;
@@ -53,7 +59,7 @@ public class NewVersionTest {
 
     @Test(dataProvider = "getVersions")
     public void shouldParseAllGivenSnapshotVersionsWithoutFailure(String expectedArtifact, String expectedVersion,
-            String expectedClassifier, String expectedExtension) {
+            String expectedClassifier, String expectedExtension) throws ParseException {
         
         String constructedVersion = expectedArtifact + "-" + expectedVersion + "-SNAPSHOT"
                 + (expectedClassifier == NO_CLASSIFIER ? "" : "-" + expectedClassifier) + "." + expectedExtension;
@@ -68,8 +74,51 @@ public class NewVersionTest {
 
     }
 
+    @Test(dataProvider = "getVersions")
+    public void shouldParseAllGivenNexusVersionsWithoutFailure(String expectedArtifact, String expectedVersion,
+            String expectedClassifier, String expectedExtension) throws ParseException {
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd.HHmmss");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        cal.set(Calendar.YEAR, 2014);
+        cal.set(Calendar.MONTH, 5);
+        cal.set(Calendar.DAY_OF_MONTH, 20);
+        cal.set(Calendar.HOUR_OF_DAY, 22);
+        cal.set(Calendar.MINUTE, 34);
+        cal.set(Calendar.SECOND, 57);
+        
+        String nexusDate = sdf.format(cal.getTime());
+        Random r = new Random(System.currentTimeMillis());
+        int nextInt = r.nextInt(2048);
+
+        String constructedVersion = expectedArtifact + "-" + expectedVersion + "-" + nexusDate + "-" + nextInt
+                + (expectedClassifier == NO_CLASSIFIER ? "" : "-" + expectedClassifier) + "." + expectedExtension;
+        
+        NewVersion version = new NewVersion(constructedVersion);
+
+        assertThat(version.getArtifact()).isEqualTo(expectedArtifact);
+        assertThat(version.getVersion()).isEqualTo(expectedVersion);
+        assertThat(version.getClassifier()).isEqualTo(expectedClassifier);
+        assertThat(version.getExtension()).isEqualTo(expectedExtension);
+        
+        NexusDate resultNexusDate = version.getNexusDate();
+        assertThat(resultNexusDate.getYear()).isEqualTo(2014);
+        assertThat(resultNexusDate.getMonth()).isEqualTo(6);
+        assertThat(resultNexusDate.getDay()).isEqualTo(20);
+        assertThat(resultNexusDate.getHour()).isEqualTo(22);
+        assertThat(resultNexusDate.getMinute()).isEqualTo(34);
+        assertThat(resultNexusDate.getSeconds()).isEqualTo(57);
+    }
+
+    @Test
+    public void check() throws ParseException {
+        String version = "first-1.2-20140620.223457-1825-test-jar.anton.egon.friedhelm.gz";
+        NewVersion v = new NewVersion(version);
+    }
+
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void shouldThrowIllegalArgumentException() {
+    public void shouldThrowIllegalArgumentException() throws ParseException {
         new NewVersion("anton");
         // intentionally no assert() cause we expect to get an exception.
     }

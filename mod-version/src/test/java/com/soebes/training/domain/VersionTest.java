@@ -10,22 +10,22 @@ import org.testng.annotations.Test;
 
 public class VersionTest {
     private static final Pattern MAJOR_MINOR_PATCH_PATTERN = Pattern.compile(
-	    "(\\d+)(\\.(\\d+))?(\\.(\\d+))?(\\.(\\d+))?(\\.(\\d+))?", Pattern.CASE_INSENSITIVE);
+            "(\\d+)(\\.(\\d+))?(\\.(\\d+))?(\\.(\\d+))?(\\.(\\d+))?", Pattern.CASE_INSENSITIVE);
 
     private static final Pattern VERSION_PATTERN = Pattern.compile("(.*)\\-(\\d+)(\\.(\\d+)(\\.(\\d+))?)?(\\-(.*))?",
-	    Pattern.CASE_INSENSITIVE);
+            Pattern.CASE_INSENSITIVE);
 
     // private static final Pattern SNAPSHOT_VERSION_PATTERN =
     // Pattern.compile("\\-SNAPSHOT\\.((.*))$");
     private static final Pattern SNAPSHOT_VERSION_PATTERN = Pattern.compile("(.*)" + "\\-" + "(" + Pattern.quote("SNAPSHOT") + ")"
-	    + "\\.((.*))$");
+            + "\\.((.*))$");
 
     private static final Pattern VERSION_NEXUS_PATTERN = Pattern
-	    .compile("(.*)\\-(\\d{4})(\\d{2})(\\d{2})\\.(\\d{2})(\\d{2})(\\d{2})\\-(\\d+)\\.((.*))$");
+            .compile("(.*)\\-(\\d{4})(\\d{2})(\\d{2})\\.(\\d{2})(\\d{2})(\\d{2})\\-(\\d+)\\.((.*))$");
 
     @DataProvider
     public Object[][] getVersions() {
-	//@formatter:off
+        //@formatter:off
 	return new String[][] {
 		{ "A-1.2.3-SNAPSHOT.jar" },
 		{ "xyz-abc-1.2.3-20140516.123456-12.jar" },
@@ -35,18 +35,18 @@ public class VersionTest {
 
     @Test(dataProvider = "getVersions")
     public void xTest(String version) {
-	Matcher matcher = VERSION_PATTERN.matcher(version);
-	assertThat(matcher.matches()).isTrue();
-	System.out.println("-- Version: " + version);
-	System.out.println("  Groups:" + matcher.groupCount());
-	for (int i = 0; i < matcher.groupCount(); i++) {
-	    System.out.println("  Group[" + i + "]=" + matcher.group(i));
-	}
+        Matcher matcher = VERSION_PATTERN.matcher(version);
+        assertThat(matcher.matches()).isTrue();
+        System.out.println("-- Version: " + version);
+        System.out.println("  Groups:" + matcher.groupCount());
+        for (int i = 0; i < matcher.groupCount(); i++) {
+            System.out.println("  Group[" + i + "]=" + matcher.group(i));
+        }
     }
 
     @DataProvider
     public Object[][] getNexusVersions() {
-	//@formatter:off
+        //@formatter:off
 	return new String[][] {
 		{ "A-1.2.3-20140526.123456-1.jar" },
 		{ "XYZ-egon-2.4.5.16-20140526.123456-12.jar" },
@@ -58,19 +58,19 @@ public class VersionTest {
 
     @Test(dataProvider = "getNexusVersions")
     public void shouldNexusVersion(String nexusVersions) {
-	Matcher matcher = VERSION_NEXUS_PATTERN.matcher(nexusVersions);
-	assertThat(matcher.matches()).isTrue();
-	assertThat(matcher.groupCount()).isEqualTo(10);
-	System.out.println("-- NexusVersion: " + nexusVersions);
-	System.out.println("  Groups:" + matcher.groupCount());
-	for (int i = 0; i < matcher.groupCount(); i++) {
-	    System.out.println("  Group[" + i + "]=" + matcher.group(i));
-	}
+        Matcher matcher = VERSION_NEXUS_PATTERN.matcher(nexusVersions);
+        assertThat(matcher.matches()).isTrue();
+        assertThat(matcher.groupCount()).isEqualTo(10);
+        System.out.println("-- NexusVersion: " + nexusVersions);
+        System.out.println("  Groups:" + matcher.groupCount());
+        for (int i = 0; i < matcher.groupCount(); i++) {
+            System.out.println("  Group[" + i + "]=" + matcher.group(i));
+        }
     }
 
     @DataProvider
     public Object[][] getSnapshotVersions() {
-	//@formatter:off
+        //@formatter:off
 	return new String[][] {
 		{ "A-1-SNAPSHOT.jar" },
 		{ "A-1.2-SNAPSHOT.jar" },
@@ -85,19 +85,19 @@ public class VersionTest {
 
     @Test(dataProvider = "getSnapshotVersions")
     public void shouldSnapshotVersion(String snapshotVersions) {
-	Matcher matcher = SNAPSHOT_VERSION_PATTERN.matcher(snapshotVersions);
-	assertThat(matcher.matches()).isTrue();
-	// assertThat(matcher.groupCount()).isEqualTo(9);
-	System.out.println("-- SnapshotVersion: " + snapshotVersions);
-	System.out.println("  Groups:" + matcher.groupCount());
-	for (int i = 0; i < matcher.groupCount(); i++) {
-	    System.out.println("  Group[" + i + "]=" + matcher.group(i));
-	}
+        Matcher matcher = SNAPSHOT_VERSION_PATTERN.matcher(snapshotVersions);
+        assertThat(matcher.matches()).isTrue();
+        // assertThat(matcher.groupCount()).isEqualTo(9);
+        System.out.println("-- SnapshotVersion: " + snapshotVersions);
+        System.out.println("  Groups:" + matcher.groupCount());
+        for (int i = 0; i < matcher.groupCount(); i++) {
+            System.out.println("  Group[" + i + "]=" + matcher.group(i));
+        }
     }
 
     @DataProvider
     public Object[][] getMajorMinorPatchVersions() {
-	//@formatter:off
+        //@formatter:off
 	return new String[][] {
 		{ "1" },
 		{ "1.2" },
@@ -110,13 +110,13 @@ public class VersionTest {
 
     @Test(dataProvider = "getMajorMinorPatchVersions")
     public void shouldMajorMinorPatchVersion(String versions) {
-	Matcher matcher = MAJOR_MINOR_PATCH_PATTERN.matcher(versions);
-	assertThat(matcher.matches()).isTrue();
-	System.out.println("-- MajorMinorPatchVersions: " + versions);
-	System.out.println("  Groups:" + matcher.groupCount());
-	for (int i = 0; i < matcher.groupCount(); i++) {
-	    System.out.println("  Group[" + i + "]=" + matcher.group(i));
-	}
+        Matcher matcher = MAJOR_MINOR_PATCH_PATTERN.matcher(versions);
+        assertThat(matcher.matches()).isTrue();
+        System.out.println("-- MajorMinorPatchVersions: " + versions);
+        System.out.println("  Groups:" + matcher.groupCount());
+        for (int i = 0; i < matcher.groupCount(); i++) {
+            System.out.println("  Group[" + i + "]=" + matcher.group(i));
+        }
     }
 
 }
