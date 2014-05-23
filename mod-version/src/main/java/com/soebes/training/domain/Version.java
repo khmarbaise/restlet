@@ -37,6 +37,7 @@ public class Version {
                 this.nexusDate = new NexusDate(matcherSnapshot.group(7));
                 this.nexus = true;
                 this.snapshot = true;
+                this.release = false;
                 this.nexusCount = Integer.valueOf(matcherSnapshot.group(8));
             }
 

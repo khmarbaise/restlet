@@ -55,6 +55,7 @@ public class VersionTest {
         assertThat(version.getClassifier()).isEqualTo(expectedClassifier);
         assertThat(version.getExtension()).isEqualTo(expectedExtension);
         assertThat(version.isSnapshot()).isFalse();
+        assertThat(version.isRelease()).isTrue();
     }
 
     @Test(dataProvider = "getVersions")
@@ -115,6 +116,19 @@ public class VersionTest {
     public void check() throws ParseException {
         String version = "first-1.2-20140620.223457-1825-test-jar.anton.egon.friedhelm.gz";
         Version v = new Version(version);
+        assertThat(v.getArtifact()).isEqualTo("first");
+        assertThat(v.getVersion()).isEqualTo("1.2");
+        assertThat(v.getClassifier()).isEqualTo("test-jar");
+        assertThat(v.getExtension()).isEqualTo("anton.egon.friedhelm.gz");
+        
+        assertThat(v.getNexusCount()).isEqualTo(1825);
+        NexusDate nexusDate = v.getNexusDate();
+        assertThat(nexusDate.getYear()).isEqualTo(2014);
+        assertThat(nexusDate.getMonth()).isEqualTo(06);
+        assertThat(nexusDate.getDay()).isEqualTo(20);
+        assertThat(nexusDate.getHour()).isEqualTo(22);
+        assertThat(nexusDate.getMinute()).isEqualTo(34);
+        assertThat(nexusDate.getSeconds()).isEqualTo(57);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
