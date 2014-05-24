@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 public class Version {
 
     //@formatter:off
-    private static final Pattern SNAPSHOT_VERSION_PATTERN = Pattern.compile("(.*?)" 
+    private static final Pattern VERSION_PATTERN = Pattern.compile("(.*?)" 
        + "\\-((\\d+)(\\.(\\d+))*)" 
        + "(\\-(\\d{4}\\d{2}\\d{2}\\.\\d{2}\\d{2}\\d{2})\\-(\\d+))?"
        + "(\\-(" + Pattern.quote("SNAPSHOT") + "))?"
@@ -27,30 +27,29 @@ public class Version {
     private int nexusCount;
 
     public Version(String version) throws ParseException {
-        Matcher matcherSnapshot = SNAPSHOT_VERSION_PATTERN.matcher(version);
+        Matcher matcher = VERSION_PATTERN.matcher(version);
 
-        if (matcherSnapshot.matches()) {
-            this.artifact = matcherSnapshot.group(1);
-            this.version = matcherSnapshot.group(2);
+        if (matcher.matches()) {
+            this.snapshot = false;
+            this.release = false;
 
-            if (matcherSnapshot.group(7) != null) {
-                this.nexusDate = new NexusDate(matcherSnapshot.group(7));
+            this.artifact = matcher.group(1);
+            this.version = matcher.group(2);
+
+            if (matcher.group(7) != null) {
+                this.nexusDate = new NexusDate(matcher.group(7));
                 this.nexus = true;
-                this.snapshot = true;
-                this.release = false;
-                this.nexusCount = Integer.valueOf(matcherSnapshot.group(8));
+                this.nexusCount = Integer.valueOf(matcher.group(8));
             }
 
-            if (matcherSnapshot.group(10) == null) {
-                this.snapshot = false;
+            if (matcher.group(10) == null && matcher.group(7) == null) {
                 this.release = true;
             } else {
                 this.snapshot = true;
-                this.release = false;
             }
             
-            this.classifier = matcherSnapshot.group(12);
-            this.extension = matcherSnapshot.group(14);
+            this.classifier = matcher.group(12);
+            this.extension = matcher.group(14);
         } else {
             throw new IllegalArgumentException("The format of the version does not match.");
         }

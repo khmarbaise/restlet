@@ -72,6 +72,7 @@ public class VersionTest {
         assertThat(version.getClassifier()).isEqualTo(expectedClassifier);
         assertThat(version.getExtension()).isEqualTo(expectedExtension);
         assertThat(version.isSnapshot()).isTrue();
+        assertThat(version.isRelease()).isFalse();
 
     }
 
@@ -102,6 +103,10 @@ public class VersionTest {
         assertThat(version.getVersion()).isEqualTo(expectedVersion);
         assertThat(version.getClassifier()).isEqualTo(expectedClassifier);
         assertThat(version.getExtension()).isEqualTo(expectedExtension);
+        assertThat(version.getNexusCount()).isEqualTo(nextInt);
+        assertThat(version.isNexus()).isTrue();
+        assertThat(version.isSnapshot()).isTrue();
+        assertThat(version.isRelease()).isFalse();
         
         NexusDate resultNexusDate = version.getNexusDate();
         assertThat(resultNexusDate.getYear()).isEqualTo(2014);
