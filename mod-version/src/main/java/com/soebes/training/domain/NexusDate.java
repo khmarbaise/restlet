@@ -9,6 +9,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+/**
+ * TODO: Create builder to handle the checks for day/month/year in relationship with leap year.
+ * 
+ * @author kama
+ *
+ */
 public class NexusDate {
 
     private static final TimeZone TIME_ZONE_UTC = TimeZone.getTimeZone("UTC");
