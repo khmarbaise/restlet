@@ -67,7 +67,7 @@ public class NexusDate {
     }
 
     public NexusDate setDay(int day) {
-        checkArgument(month > 0 && month <= 12, "Must must be in the range 1..12.");
+        checkArgument(day > 0 && day <= 31, "Must must be in the range 1..31.");
         this.day = day;
         return this;
     }
@@ -77,7 +77,7 @@ public class NexusDate {
     }
 
     public NexusDate setHour(int hour) {
-        checkArgument(hour > 0 && hour <= 31, "Must must be in the range 1..31.");
+        checkArgument(hour > 0 && hour <= 23, "Must must be in the range 1..23.");
         this.hour = hour;
         return this;
     }
@@ -107,7 +107,7 @@ public class NexusDate {
     }
 
     public NexusDate setNexusDate(Date nexusDate) {
-        this.nexusDate = nexusDate;
+        this.nexusDate = checkNotNull(nexusDate, "Not allowed to give null for nexusDate.");
         return this;
     }
 }
