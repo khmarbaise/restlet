@@ -20,7 +20,7 @@
       <artifactId>mod-version</artifactId>
       <version>${project.version}</version>
     </dependency>
-  
+
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>

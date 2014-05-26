@@ -22,17 +22,17 @@ public class StageResourceIT extends IntegrationTestBase {
 
     @Test
     public void shouldReturnWelcomeMessage() throws ResourceException, IOException {
-	Client client = new Client(Protocol.HTTP);
-	Request request = new Request(Method.GET, configuration.getURI().toString());
-	Response response = client.handle(request);
+        Client client = new Client(Protocol.HTTP);
+        Request request = new Request(Method.GET, configuration.getURI().toString());
+        Response response = client.handle(request);
 
-	assertThat(response.getStatus()).isEqualTo(Status.SUCCESS_OK);
-	assertThat(response.getEntityAsText()).isEqualTo("Welcome to the FirstStages !");
+        assertThat(response.getStatus()).isEqualTo(Status.SUCCESS_OK);
+        assertThat(response.getEntityAsText()).isEqualTo("Welcome to the FirstStages !");
     }
 
     @DataProvider
     public Object[][] getStages() {
-	//@formatter:off
+        //@formatter:off
 	return new String[][] { 
 	  { "dev-1" }, 
 	  { "dev-2" }, 
@@ -43,25 +43,25 @@ public class StageResourceIT extends IntegrationTestBase {
 
     @Test(dataProvider = "getStages")
     public void shouldReturnMessageForEnvironments(String stage) throws ResourceException, IOException {
-	Client client = new Client(Protocol.HTTP);
-	Reference addSegment = configuration.getReference().addSegment("stage").addSegment(stage);
-	Request request = new Request(Method.GET, addSegment);
-	Response response = client.handle(request);
+        Client client = new Client(Protocol.HTTP);
+        Reference addSegment = configuration.getReference().addSegment("stage").addSegment(stage);
+        Request request = new Request(Method.GET, addSegment);
+        Response response = client.handle(request);
 
-	assertThat(response.getStatus()).isEqualTo(Status.SUCCESS_OK);
-	assertThat(response.getEntityAsText()).isEqualTo("The first Message (xml)[" + stage + "]" + Constants.NEWLINE);
+        assertThat(response.getStatus()).isEqualTo(Status.SUCCESS_OK);
+        assertThat(response.getEntityAsText()).isEqualTo("The first Message (xml)[" + stage + "]" + Constants.NEWLINE);
     }
 
     @Test
     public void shouldSetValue() throws ResourceException, IOException {
-	Client client = new Client(Protocol.HTTP);
-	Reference addSegment = configuration.getReference().addSegment("stage").addSegment("dev-1");
-	Representation rep = new StringRepresentation("This is the given message.", MediaType.TEXT_PLAIN);
-	Request request = new Request(Method.PUT, addSegment, rep);
-	Response response = client.handle(request);
+        Client client = new Client(Protocol.HTTP);
+        Reference addSegment = configuration.getReference().addSegment("stage").addSegment("dev-1");
+        Representation rep = new StringRepresentation("This is the given message.", MediaType.TEXT_PLAIN);
+        Request request = new Request(Method.PUT, addSegment, rep);
+        Response response = client.handle(request);
 
-	assertThat(response.getStatus()).isEqualTo(Status.SUCCESS_OK);
-	assertThat(response.getEntityAsText()).isEqualTo("This is the given message.");
+        assertThat(response.getStatus()).isEqualTo(Status.SUCCESS_OK);
+        assertThat(response.getEntityAsText()).isEqualTo("This is the given message.");
     }
 
 }
